@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Alguien Especial ✨</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600;700&family=Alex+Brush&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="relative min-h-screen selection:bg-rose-500 selection:text-white">
+
+    <!-- Canvas para partículas e interacciones -->
+    <canvas id="particleCanvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0"></canvas>
+    <canvas id="burstCanvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-30"></canvas>
+
+    <!-- PANTALLA DE BIENVENIDA -->
+    <div id="welcomeLobby" class="fixed inset-0 w-full h-full z-50 flex flex-col justify-center items-center px-4 transition-all duration-1000 bg-[#0d0412]">
+        <div class="glass-card max-w-md w-full p-8 rounded-3xl text-center flex flex-col items-center animate-float relative overflow-hidden">
+            <div class="absolute -top-24 -left-24 w-48 h-48 bg-rose-500/20 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-purple-500/20 rounded-full blur-3xl"></div>
+
+            <div class="w-20 h-20 bg-rose-500/10 rounded-full flex items-center justify-center mb-6 border border-rose-500/30">
+                <i class="fa-solid fa-envelope-open-text text-3xl text-rose-400 animate-pulse"></i>
+            </div>
+
+            <h1 class="serif-font text-3xl md:text-4xl text-rose-200 mb-4 font-bold tracking-wide">Hola, te preparé algo especial...</h1>
+            <p class="text-rose-100/70 mb-8 text-sm md:text-base leading-relaxed">
+                Quería decirte algo de una forma diferente. Te recomiendo usar audífonos.
+            </p>
+
+            <button onclick="startRomanticExperience()" class="group relative px-8 py-4 bg-gradient-to-r from-rose-500 to-purple-600 rounded-full text-white font-semibold shadow-lg hover:shadow-rose-500/30 transition-all duration-300 transform hover:-translate-y-1 active:scale-95 flex items-center space-x-3 overflow-hidden">
+                <span class="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
+                <span>Entrar y Escuchar</span>
+                <i class="fa-solid fa-volume-high text-sm animate-bounce"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div id="mainExperience" class="opacity-0 pointer-events-none transition-all duration-1000 relative z-10 max-w-6xl mx-auto px-4 py-8 md:py-16 flex flex-col min-h-screen justify-between">
+
+        <!-- CABECERA -->
+        <header class="text-center mb-10 md:mb-16 relative">
+            <div id="chapterBadge" class="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center border fade-content" style="background: rgba(244, 63, 94, 0.1); border-color: rgba(244, 63, 94, 0.3);">
+                <i id="chapterBadgeIcon" class="fa-solid fa-wand-magic-sparkles text-xl" style="color: rgb(244, 63, 94);"></i>
+            </div>
+
+            <h2 id="headerTitle" class="handwritten-font text-rose-400 text-5xl md:text-7xl mb-2 fade-content">Para alguien que hace brillar mi mundo</h2>
+            <p id="headerSubtitle" class="serif-font tracking-widest text-xs md:text-sm text-rose-200/50 uppercase fade-content">Un pequeño espacio para contarte un secreto</p>
+            <div class="w-16 h-[2px] bg-rose-500/50 mx-auto mt-4 rounded-full"></div>
+
+            <div class="flex items-center justify-center gap-2 mt-6">
+                <span id="trackDots" class="flex items-center gap-2"></span>
+            </div>
+        </header>
+
+        <!-- Ícono decorativo de fondo -->
+        <i id="chapterBgIcon" class="fa-solid fa-heart fixed pointer-events-none select-none" style="top: 8%; right: -5%; font-size: 28rem; color: rgba(244, 63, 94, 0.04); z-index: 1; transform: rotate(-15deg); transition: opacity 0.6s ease;"></i>
+
+        <!-- GRID PRINCIPAL -->
+        <main class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-20 relative z-10">
+
+            <!-- COLUMNA IZQUIERDA -->
+            <section class="lg:col-span-7 space-y-8">
+
+                <!-- TARJETA DE MENSAJE PRINCIPAL -->
+                <div class="glass-card p-8 rounded-3xl">
+                    <div id="cardTitle" class="text-2xl font-semibold mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-heart text-rose-400"></i>
+                        <span>Esto es lo que quería contarte</span>
+                    </div>
+                    <div id="cardMessage" class="space-y-4 text-rose-100/80 leading-relaxed">
+                        <!-- Se carga dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- TARJETAS DE DETALLES -->
+                <div id="detailCards" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Se cargan dinámicamente -->
+                </div>
+
+                <!-- INTERACCIÓN ÚNICA: botón visible (en vez de "clic en el fondo") -->
+                <div class="glass-card p-6 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="space-y-2 text-center md:text-left">
+                        <h4 id="interactionTitle" class="serif-font text-lg text-rose-300">Interacción</h4>
+                        <p id="interactionDescription" class="text-xs text-rose-100/60 max-w-sm">Presiona el botón para interactuar</p>
+                    </div>
+                    <div class="flex items-center justify-center shrink-0">
+                        <div id="interactionButton" class="w-16 h-16 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 glass-card-glow select-none" title="Presiona aquí">
+                            <i id="interactionButtonIcon" class="fa-solid fa-heart text-2xl text-rose-500"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- REPRODUCTOR DE MÚSICA -->
+                <div class="glass-card p-6 rounded-3xl">
+                    <div class="flex items-center justify-between mb-4 gap-4">
+                        <div class="flex-1 min-w-0">
+                            <h3 id="trackTitle" class="font-semibold text-rose-200 truncate">Cargando...</h3>
+                            <p id="trackArtist" class="text-xs text-rose-100/60 truncate">Artista</p>
+                        </div>
+                        <i id="musicDiscIcon" class="fa-solid fa-compact-disc text-5xl text-rose-500/30 animate-spin"></i>
+                    </div>
+
+                    <!-- Controles -->
+                    <div class="flex items-center justify-center gap-3 mb-4">
+                        <button onclick="togglePlaylist()" class="w-10 h-10 bg-rose-500/20 rounded-lg flex items-center justify-center text-rose-300 hover:bg-rose-500/30 transition-all">
+                            <i class="fa-solid fa-list text-sm"></i>
+                        </button>
+                        <button onclick="prevTrack()" class="text-rose-300/70 hover:text-rose-300 transition-colors">
+                            <i class="fa-solid fa-step-backward text-lg"></i>
+                        </button>
+                        <button id="playPauseBtn" onclick="togglePlay()" class="w-12 h-12 bg-rose-500 hover:bg-rose-600 rounded-full flex items-center justify-center text-white transition-all shadow-md active:scale-95">
+                            <i class="fa-solid fa-play text-lg ml-1"></i>
+                        </button>
+                        <button onclick="nextTrack()" class="text-rose-300/70 hover:text-rose-300 transition-colors">
+                            <i class="fa-solid fa-step-forward text-lg"></i>
+                        </button>
+                        
+                        <!-- Controles de volumen mejorados -->
+                        <div class="flex items-center gap-2 ml-2 pl-2 border-l border-rose-500/20">
+                            <button onclick="decreaseVolume()" class="w-8 h-8 bg-rose-500/20 rounded flex items-center justify-center text-rose-300 hover:bg-rose-500/30 transition-all text-sm">
+                                <i class="fa-solid fa-minus"></i>
+                            </button>
+                            <span id="volumeLabel" class="text-xs text-rose-300/70 w-8 text-center">80%</span>
+                            <button onclick="increaseVolume()" class="w-8 h-8 bg-rose-500/20 rounded flex items-center justify-center text-rose-300 hover:bg-rose-500/30 transition-all text-sm">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Barra de progreso -->
+                    <div id="progressBar" onclick="seekTrack(event)" class="flex-1 h-1.5 bg-rose-950 rounded-full cursor-pointer overflow-hidden relative border border-rose-500/10 mb-2">
+                        <div id="progressFill" class="h-full bg-gradient-to-r from-rose-500 to-purple-600 rounded-full" style="width: 0%"></div>
+                    </div>
+
+                    <!-- Tiempo -->
+                    <div class="flex justify-between text-xs text-rose-300/70 font-mono">
+                        <span id="currentTime">0:00</span>
+                        <span id="durationTime">0:00</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- COLUMNA DERECHA: LETRAS SINCRONIZADAS -->
+            <section class="lg:col-span-5">
+                <div class="glass-card p-6 rounded-3xl flex flex-col h-[520px] overflow-hidden border-rose-500/25">
+                    <div class="flex items-center justify-between border-b border-rose-500/10 pb-4 mb-4 flex-shrink-0">
+                        <span class="text-xs text-rose-200/50 uppercase tracking-widest flex items-center gap-2">
+                            <i class="fa-solid fa-music text-rose-400"></i> Sincronía en vivo
+                        </span>
+                        <span id="musicTimer" class="text-xs font-mono text-rose-300/80">00:00</span>
+                    </div>
+                    
+                    <div id="lyricsContainer" class="flex-1 overflow-y-auto space-y-2 pr-3 custom-scrollbar">
+                        <!-- Las letras se cargan aquí -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- PLAYLIST -->
+        <div id="playlistPanel" class="glass-card glass-card-glow p-4 rounded-2xl hidden-panel fixed bottom-6 left-4 right-4 md:left-1/2 md:right-auto md:-translate-x-1/2 max-w-md w-[calc(100%-2rem)] md:w-full max-h-72 overflow-y-auto z-40 border-rose-500/30">
+            <h3 class="text-sm font-semibold text-rose-200 mb-3 uppercase tracking-widest">Playlist</h3>
+            <div id="playlistItems" class="space-y-2">
+                <!-- Se cargan dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA: aparece al terminar la última canción -->
+    <div id="finalCtaScreen" class="fixed inset-0 w-full h-full z-50 hidden flex flex-col justify-center items-center px-4 bg-[#0d0412]/95 backdrop-blur-md">
+        <div class="text-center flex flex-col items-center animate-float">
+            <p class="serif-font tracking-widest text-xs md:text-sm text-rose-200/50 uppercase mb-6">Todavía hay algo más</p>
+            <button onclick="openLetterScreen()" class="group relative w-36 h-36 md:w-44 md:h-44 rounded-full bg-gradient-to-br from-rose-500 to-purple-600 flex items-center justify-center shadow-2xl hover:shadow-rose-500/40 transition-all duration-500 hover:scale-105 active:scale-95">
+                <span class="absolute inset-0 rounded-full bg-rose-400/30 animate-ping"></span>
+                <i class="fa-solid fa-envelope text-4xl md:text-5xl text-white relative z-10"></i>
+            </button>
+            <p class="text-rose-100/60 text-xs md:text-sm mt-6 max-w-xs">Presiona para ver lo último que te quiero decir</p>
+        </div>
+    </div>
+
+    <!-- PANTALLA: carta cerrada con candado -->
+    <div id="letterScreen" class="fixed inset-0 w-full h-full z-50 hidden overflow-y-auto bg-[#0d0412]">
+        <div class="min-h-full w-full flex flex-col justify-center items-center px-4 py-10">
+        <div class="relative w-full max-w-md letter-wrap">
+
+            <!-- Estado 1: sobre cerrado -->
+            <div id="lockedEnvelope" class="glass-card w-full rounded-3xl p-8 md:p-10 flex flex-col items-center text-center relative overflow-hidden letter-panel">
+                <div class="absolute -top-24 -left-24 w-48 h-48 bg-rose-500/20 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-purple-500/20 rounded-full blur-3xl"></div>
+
+                <div id="padlockIcon" class="w-20 h-20 rounded-full bg-rose-500/10 border border-rose-500/30 flex items-center justify-center mb-6 relative z-10">
+                    <i id="padlockIconGlyph" class="fa-solid fa-lock text-3xl text-rose-300"></i>
+                </div>
+
+                <h2 class="handwritten-font text-4xl text-rose-200 mb-2 relative z-10">Una carta cerrada</h2>
+                <p class="text-rose-100/60 text-xs md:text-sm mb-10 max-w-xs relative z-10">Solo una llave puede abrirla.</p>
+
+                <button id="keyDraggable" class="w-16 h-16 rounded-full bg-gradient-to-br from-amber-300 to-amber-500 flex items-center justify-center shadow-lg cursor-pointer select-none relative z-10 key-idle" title="Toca la llave">
+                    <i class="fa-solid fa-key text-2xl text-amber-900"></i>
+                </button>
+            </div>
+
+            <!-- Estado 2: carta abierta -->
+            <div id="openLetter" class="glass-card w-full rounded-3xl p-8 md:p-12 hidden relative overflow-hidden letter-panel">
+                <div class="absolute -top-24 -right-24 w-48 h-48 bg-rose-500/20 rounded-full blur-3xl"></div>
+                <div class="flex items-center justify-center mb-6 relative z-10">
+                    <i class="fa-solid fa-envelope-open-text text-3xl text-rose-300"></i>
+                </div>
+                <div id="letterContent" class="letter-font text-xl md:text-2xl text-rose-100 leading-relaxed text-left relative z-10">
+                    <!-- ✏️ ACÁ VA TU TEXTO FINAL: reemplazá estos párrafos por lo que quieras decir -->
+                    <p>Hola, Lia. Llevo mucho tiempo pensando si escribirte esto o no. Y, para ser sincero, me costó muchísimo decidirme. No porque dude de lo que siento, sino porque volver a abrir mi corazón es algo que me da miedo. Hace dos años salí de una relación en la que, mientras más amé, más daño terminé recibiendo. Desde entonces quedaron muchas inseguridades en mí. Me cuesta confiar, me cuesta creer que alguien pueda quedarse y hay días en los que mis propios pensamientos me hacen sentir que es mejor no volver a intentarlo.</p>
+                    <p>Pero el tiempo también me enseñó algo. Aprendí a fijarme mucho más en las acciones que en las palabras. No porque las palabras no valgan, sino porque para mí un detalle, una intención o el tiempo que alguien decide dedicarte dicen muchísimo más. Por eso, cuando una persona me importa, intento demostrarlo con hechos. Si soy atento contigo, si me acuerdo de pequeños detalles o trato de estar presente, es porque realmente me nace hacerlo.</p>
+                    <p>Hay algo que quizá nunca te dije. Cada vez que hablamos, intento conocerte un poquito más. Me gusta descubrir cómo eres, qué piensas, qué te hace feliz, qué cosas te gustan... porque conocerte nunca se me ha hecho una obligación, al contrario, es algo que disfruto.</p>
+                    <p>Y también quiero ser sincero con algo más. A veces, cuando tus respuestas son muy cortitas o siento que respondes por responder, no puedo evitar que me choque un poquito. No es un reclamo, de verdad que no. Solo pasa que, cuando alguien te importa tanto como tú me importas a mí, hasta las cosas más pequeñas terminan sintiéndose enormes. Tal vez para ti sea solo un mensaje más, pero para mí muchas veces significa mucho, porque siempre espero conocer un poquito más de ti.</p>
+                    <p>Sé que esta confesión puede parecer de un momento para otro, pero la verdad es que no. Lo que siento por ti lleva bastante tiempo creciendo. No me enamoré de un solo momento contigo; me fui enamorando de todos esos pequeños momentos que, sin que tú lo supieras, terminaron siendo enormes para mí. Solo necesitaba encontrar el valor para decirlo.</p>
+                    <p>Esta página ha sido durante mucho tiempo mi lugar seguro. Aquí fui dejando canciones, pensamientos y sentimientos que nunca me atreví a decir en voz alta. Y creo que no podía haber un mejor final para ella que escribirte esto.</p>
+                    <p>Porque después de todo lo que viví, nunca imaginé que alguien volvería a hacerme sentir esa ilusión de conocer a una persona, de querer escribirle, de esperar un mensaje suyo o simplemente sonreír cuando aparece una notificación.</p>
+                    <p>Y esa persona eres tú.</p>
+                    <p>Lia... me gustas. Me gustas de verdad.</p>
+                    <p>Sé que después de este mensaje las cosas pueden cambiar. Tal vez ya no volvamos a hablar igual, tal vez todo siga como hasta ahora o tal vez este sea el inicio de algo bonito. La verdad es que no lo sé. Pero prefiero correr el riesgo de ser sincero contigo antes que quedarme toda la vida pensando: <em>"¿Qué hubiera pasado si se lo decía?"</em></p>
+                    <p>No espero que sientas lo mismo ni quiero que te sientas presionada por esto. Lo único que me gustaría pedirte es que seas completamente sincera conmigo. Sea cual sea lo que pienses o sientas, prefiero una verdad que venga de tu corazón antes que una respuesta solo por no hacerme sentir mal. Te prometo que voy a respetar lo que decidas.</p>
+                    <p>Si algún día decides darme la oportunidad de seguir conociéndote, prometo hacer lo que siempre he intentado hacer: demostrar con acciones todo aquello que a veces las palabras no alcanzan a explicar.</p>
+                    <p>Y si tu respuesta es diferente a lo que espero, también quiero darte las gracias. Porque, sin darte cuenta, hiciste que volviera a creer que mi corazón todavía era capaz de sentir algo tan bonito por alguien.</p>
+                    <p>Gracias por llegar a mi vida.</p>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Audio element -->
+    <audio id="romanticAudio"></audio>
+
+    <!-- Audio de la carta final: instrumental, en loop, de fondo (sin letras) -->
+    <audio id="letterAudio" loop></audio>
+
+    <!-- Scripts en orden -->
+    <script src="js/particles.js"></script>
+    <script src="js/interactions.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
